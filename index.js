@@ -1,12 +1,20 @@
 const chalk = require('chalk');
-const robot = require("robotjs")
+const {keyboard, Key} = require("@nut-tree-fork/nut-js")
 const {GlobalKeyboardListener} = require("node-global-key-listener")
 const kr = new GlobalKeyboardListener()
 const fs = require("fs");
+const path = require("path");
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 function loadConfig() {
-    return JSON.parse(fs.readFileSync("./config.json", "utf-8"));
+    try {
+        const configPath = path.join(__dirname, 'config.json');
+        const configData = fs.readFileSync(configPath, 'utf-8');
+        return JSON.parse(configData);
+    } catch (error) {
+        console.error("Error loading config:", error);
+        return []; // Возвращаем пустой массив или дефолтные значения
+    }
 }
 
 let working = true
@@ -47,7 +55,7 @@ async function main() {
         while (working) {
             for (const el of sequence) {
                 if (!working) return
-                robot.keyTap(el.key)
+                keyboard.pressKey(Key[el.key])
                 await delay(el.delay)
             }
         }
