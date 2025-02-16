@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const ks = require('node-key-sender');
+const robot = require("robotjs")
 const {GlobalKeyboardListener} = require("node-global-key-listener")
 const kr = new GlobalKeyboardListener()
 const fs = require("fs");
@@ -47,7 +47,7 @@ async function main() {
         while (working) {
             for (const el of sequence) {
                 if (!working) return
-                await ks.sendKey(el.key)
+                robot.keyTap(el.key)
                 await delay(el.delay)
             }
         }
